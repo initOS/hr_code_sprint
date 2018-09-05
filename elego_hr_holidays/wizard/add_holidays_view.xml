@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="view_add_holidays" model="ir.ui.view">
+            <field name="name">add.holidays.form</field>
+            <field name="model">add.holidays</field>
+            <field name="arch" type="xml">
+                <form name="add_holidays" string="Create Allocation and Leave Requests for Public Holidays">
+                    <group col="4" colspan="6">
+                        <field name="holiday_type"/>
+                        <newline/>
+                        <field name="employee_id" attrs="{'invisible': [('holiday_type','=','category')]}"/>
+                        <newline/>
+                        <field name="category_id" attrs="{'invisible': [('holiday_type','=','employee')]}"/>
+                    </group>
+                    <footer>
+                        <button name="action_add_holidays" string="Create" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_add_holidays" model="ir.actions.act_window">
+            <field name="name">Create Allocation and Leave Requests for Public Holidays</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">add.holidays</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+</odoo>

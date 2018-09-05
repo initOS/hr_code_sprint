@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+        <record id="view_public_holidays_form" model="ir.ui.view">
+            <field name="name">hr.holidays.public.form</field>
+            <field name="model">hr.holidays.public</field>
+            <field name="inherit_id" ref="hr_holidays_public.view_holidays_public_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form//field[@name='year']/.." position="before">
+                    <header>
+                        <button name="%(elego_hr_holidays.action_add_holidays)d"
+                                string="Create Allocation and Leave Requests"
+                                type="action" groups="hr.group_hr_manager"/>
+                        <button name="action_delete_allocation_and_leaves"
+                                string="Delete Allocation and Leave Requests"
+                                type="object" groups="hr.group_hr_manager"/>
+                    </header>
+                </xpath>
+
+                <xpath expr="//form" position="inside">
+                    <group string="Allocations" groups="hr.group_hr_manager"> <!--# groups="base.group_no_one"> !-->
+                        <field name="allocation_ids" readonly="1" nolabel="1">
+                            <tree string="Allocations">
+                                <field name="employee_id"/>
+                                <field name="department_id"/>
+                                <field name="number_of_days_temp"/>
+                                <field name="state"/>
+                            </tree>
+                        </field>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <delete model="ir.ui.menu" id="hr_holidays_public.menu_create_next_year_public_holidays"/>
+
+</odoo>

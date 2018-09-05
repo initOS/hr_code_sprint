@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="view_public_holiday_copy">
+            <field name="name">view.public.holiday.copy</field>
+            <field name="model">public.holiday.copy</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Copy Public Holidays">
+                    <group col="2" colspan="2">
+                        <field name="year_from"/>
+                        <field name="year_to" />
+                    </group>
+                    <footer>
+                        <button name="action_copy_holidays" string="Copy" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_wizard_public_holiday_copy">
+            <field name="name">Copy Public Holidays</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">public.holiday.copy</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record model="ir.ui.view" id="view_public_holiday_reset">
+            <field name="name">view.public.holiday.reset</field>
+            <field name="model">public.holiday.reset</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Reset Public Holidays">
+                    <group col="2" colspan="2">
+                        <field name="year" />
+                    </group>
+                    <footer>
+                        <button name="action_reset_holidays" string="Reset" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_wizard_public_holiday_reset">
+            <field name="name">Reset Public Holidays</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">public.holiday.reset</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_wizard_public_holiday_copy"
+                  name="Copy Public Holidays"
+                  parent="hr_holidays_public.menu_hr_public_holidays"
+                  action="action_wizard_public_holiday_copy"/>
+        <menuitem id="menu_wizard_public_holiday_reset"
+                  name="Reset Public Holiday"
+                  parent="hr_holidays_public.menu_hr_public_holidays"
+                  action="action_wizard_public_holiday_reset"/>
+    </data>
+</openerp>
