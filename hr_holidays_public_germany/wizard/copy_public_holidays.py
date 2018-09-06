@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from openerp import models, fields, api, exceptions, _
 from datetime import datetime, timedelta
 
@@ -6,6 +6,62 @@ from datetime import datetime, timedelta
 class PublicHolidaysReset(models.TransientModel):
     _name = 'public.holiday.reset'
     year = fields.Integer('Year', required=True, default=(lambda self: datetime.today().year))
+
+    def calculate_easter_sunday(self, year):
+        d = (((255 - 11 * (year % 19)) - 21) % 30) + 21
+        if d > 48:
+            d += 1
+        delta = d + 6 - ((year + (year - (year % 4)) / 4) + d + 1) % 7
+        str_3_1 = '%s-03-01' % year
+        date_3_1 = datetime.strptime(str_3_1, '%Y-%m-%d')
+        easter = date_3_1 + timedelta(days=delta)
+
+        return easter
+
+    def calculate_new_good_friday(self, easter):
+        good_friday = easter - timedelta(days=2)
+        return fields.Date.to_string(good_friday)
+
+    def calculate_easter_monday(self, easter):
+        easter_monday = easter + timedelta(days=1)
+        return fields.Date.to_string(easter_monday)
+
+    def calculate_ascension_day(self, easter):
+        ascension_day = easter + timedelta(days=39)
+        return fields.Date.to_string(ascension_day)
+
+    def calculate_whit_monday(self, easter):
+        whit_monday = easter + timedelta(days=50)
+        return fields.Date.to_string(whit_monday)
+
+    def calculate_floating_holidays(self, existing_holidays):
+        public_holiday_line_obj = self.env['hr.holidays.public.line']
+        easter = self.calculate_easter_sunday(self.year)
+
+        # create holiday lines for floating and fixed holidays
+
+        public_holiday_line_obj.create({'name': _('Good Friday'),
+                                        'date': self.calculate_new_good_friday(easter),
+                                        'variable': True,
+                                        'year_id': existing_holidays.id})
+        public_holiday_line_obj.create({'name': _('Easter Sunday'),
+                                        'date': fields.Date.to_string(easter),
+                                        'variable': True,
+                                        'year_id': existing_holidays.id})
+
+        public_holiday_line_obj.create({'name': _('Easter Monday'),
+                                        'date': self.calculate_easter_monday(easter),
+                                        'variable': True,
+                                        'year_id': existing_holidays.id})
+        public_holiday_line_obj.create({'name': _('Ascension Day'),
+                                        'date': self.calculate_ascension_day(easter),
+                                        'variable': True,
+                                        'year_id': existing_holidays.id})
+
+        public_holiday_line_obj.create({'name': _('Whit Monday'),
+                                        'date': self.calculate_whit_monday(easter),
+                                        'variable': True,
+                                        'year_id': existing_holidays.id})
 
     @api.multi
     def action_reset_holidays(self):
@@ -19,41 +75,10 @@ class PublicHolidaysReset(models.TransientModel):
                 for holiday_line in existing_holidays.line_ids:
                     holiday_line.unlink()
 
-            # create floating holiday in new year by firstly calculating Easter sunday
-            d = (((255 - 11 * (wizard.year % 19)) - 21) % 30) + 21
-            if d > 48:
-                d += 1
-            delta = d + 6 - ((wizard.year + (wizard.year - (wizard.year % 4)) / 4) + d + 1) % 7
-            str_3_1 = '%s-03-01' % wizard.year
-            date_3_1 = datetime.strptime(str_3_1, '%Y-%m-%d')
-            easter = date_3_1 + timedelta(days=delta)
+            wizard.calculate_floating_holidays(existing_holidays)
 
-            # create holiday lines for floating and fixed holidays
-            new_holiday_date = easter - timedelta(days=2)
-            public_holiday_line_obj.create({'name': _('Good Friday'),
-                                            'date': new_holiday_date.strftime("%Y-%m-%d"),
-                                            'variable': True,
-                                            'year_id': existing_holidays.id})
-            new_holiday_date = easter
-            public_holiday_line_obj.create({'name': _('Easter Sunday'),
-                                            'date': new_holiday_date.strftime("%Y-%m-%d"),
-                                            'variable': True,
-                                            'year_id': existing_holidays.id})
-            new_holiday_date = easter + timedelta(days=1)
-            public_holiday_line_obj.create({'name': _('Easter Monday'),
-                                            'date': new_holiday_date.strftime("%Y-%m-%d"),
-                                            'variable': True,
-                                            'year_id': existing_holidays.id})
-            new_holiday_date = easter + timedelta(days=39)
-            public_holiday_line_obj.create({'name': _('Ascension Day'),
-                                            'date': new_holiday_date.strftime("%Y-%m-%d"),
-                                            'variable': True,
-                                            'year_id': existing_holidays.id})
-            new_holiday_date = easter + timedelta(days=50)
-            public_holiday_line_obj.create({'name': _('Whit Monday'),
-                                            'date': new_holiday_date.strftime("%Y-%m-%d"),
-                                            'variable': True,
-                                            'year_id': existing_holidays.id})
+
+
             #celebrated on the second Thursday after Whitsun.
 #            public_holiday_line_obj.create({'name': _("Corpus Christi"),
 #                                            'date': "%s-xx-xx" % wizard.year,
