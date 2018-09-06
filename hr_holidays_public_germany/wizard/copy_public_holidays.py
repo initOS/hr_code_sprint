@@ -190,8 +190,8 @@ class PublicHolidaysReset(models.TransientModel):
             wizard.action_delete_holidays(existing_holidays)
             wizard.calculate_floating_holidays(existing_holidays)
             wizard.calculate_fixed_holidays(existing_holidays)
-            wizard.calculate_floating_holidays(existing_holidays)
-            wizard.calculate_fixed_holidays(existing_holidays)
+            wizard.calculate_state_floating_holidays(existing_holidays)
+            wizard.calculate_state_fixed_holidays(existing_holidays)
 
         return {
             'type': 'ir.actions.act_window_close',
