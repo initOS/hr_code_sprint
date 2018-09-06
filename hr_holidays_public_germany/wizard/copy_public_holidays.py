@@ -8,7 +8,7 @@ class PublicHolidaysReset(models.TransientModel):
     _name = 'public.holiday.reset'
     year = fields.Integer('Year', required=True, default=(lambda self: datetime.today().year))
     country_id = fields.Many2one('res.country', string='Country')
-    state_id = fields.Many2one('res.country.state', string='State')
+    state_id = fields.Many2one('res.country.state', string='State', domain=[('country_id', '=', country_id)])
     @api.model
     def calculate_easter_sunday(self, year):
         d = (((255 - 11 * (year % 19)) - 21) % 30) + 21
