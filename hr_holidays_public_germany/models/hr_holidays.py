@@ -13,12 +13,12 @@ class HrHolidays(models.Model):
 
     @api.onchange('date_from', 'employee_id')
     def _onchange_date_from(self):
-        super(ElegoHolidays, self)._onchange_date_from()
+        super(HrHolidays, self)._onchange_date_from()
         self.number_of_days_temp = len(self.env['hr.holidays.public']._compute_date(self.date_from, self.date_to, self.employee_id)['annual_leaves'])
 
 
     @api.onchange('date_to', 'employee_id')
     def _onchange_date_to(self):
-        super(ElegoHolidays, self)._onchange_date_to()
+        super(HrHolidays, self)._onchange_date_to()
         self.number_of_days_temp = len(self.env['hr.holidays.public']._compute_date(self.date_from, self.date_to, self.employee_id)['annual_leaves'])
 
