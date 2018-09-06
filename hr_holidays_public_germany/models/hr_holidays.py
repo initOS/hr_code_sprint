@@ -24,7 +24,7 @@ class ElegoHolidays(models.Model):
     #(override) Model: hr.holidays, Function: _check_date()
     @api.constrains('date_from', 'date_to')
     def _check_date(self):
-        holiday_status_ph_id = self.env.ref('elego_hr_holidays.holiday_status_public_holidays').id
+        holiday_status_ph_id = self.env.ref('hr_holidays_public_germany.holiday_status_public_holidays').id
         for holiday in self:
             domain = [
                 ('date_from', '<=', holiday.date_to),
@@ -79,7 +79,7 @@ class ElegoHolidays(models.Model):
 
     @api.model
     def notify_approvers(self, holiday_id):
-        serverAction = self.env.ref('elego_hr_holidays.action_email_new_leave_notif')
+        serverAction = self.env.ref('hr_holidays_public_germany.action_email_new_leave_notif')
         ctx = {'active_model': self._name, 'active_id': holiday_id}
         serverAction.with_context(ctx).run()
         return True

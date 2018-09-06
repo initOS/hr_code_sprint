@@ -21,7 +21,7 @@ class AddHolidays(models.TransientModel):
         self.ensure_one()
         if not self.category_id and not self.employee_id:
             raise exceptions.Warning(_('You must select at least one employee or one category of employees.'))
-        holiday_status = self.env.ref('elego_hr_holidays.holiday_status_public_holidays')
+        holiday_status = self.env.ref('hr_holidays_public_germany.holiday_status_public_holidays')
         public_holiday_id = self.env.context.get('active_id', False)
         if not public_holiday_id:
             raise exceptions.Warning(_('No found active_id in context.'))

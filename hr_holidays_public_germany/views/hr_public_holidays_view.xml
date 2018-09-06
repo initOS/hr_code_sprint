@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//form//field[@name='year']/.." position="before">
                     <header>
-                        <button name="%(elego_hr_holidays.action_add_holidays)d"
+                        <button name="%(hr_holidays_public_germany.action_add_holidays)d"
                                 string="Create Allocation and Leave Requests"
                                 type="action" groups="hr.group_hr_manager"/>
                         <button name="action_delete_allocation_and_leaves"
