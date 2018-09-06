@@ -28,7 +28,7 @@ Functions:
         "hr_holidays_public",
     ],
     "data": [
-        "wizard/copy_public_holidays_view.xml",
+        "wizard/generate_public_holidays_view.xml",
         "views/hr_public_holidays_view.xml",
     ],
     "installable": True,
