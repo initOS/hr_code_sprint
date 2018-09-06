@@ -5,7 +5,7 @@
     "version": '11.0.1.0.0',
     "license": "AGPL-3",
     "category": "Human Resources",
-    "author": "Yu Weng <>, " # TODO add yu email
+    "author": "Yu Weng <yweng@elegosoft.com>, "
               "Nikolina Todorova <nikolina.todorova@initos.com>, "
               "Odoo Community Association (OCA)",
     "description": """
@@ -28,9 +28,7 @@ Functions:
         "hr_holidays_public",
     ],
     "data": [
-        "wizard/add_holidays_view.xml",
         "wizard/copy_public_holidays_view.xml",
-        "data/leave_notifications.xml",
         "data/hr_holidays_data.xml",
         "views/hr_public_holidays_view.xml",
     ],

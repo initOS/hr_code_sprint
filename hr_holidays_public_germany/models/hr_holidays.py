@@ -7,19 +7,9 @@ from odoo import api, fields, models, exceptions, _
 _logger = logging.getLogger(__name__)
 
 
-class ElegoHolidays(models.Model):
+class HrHolidays(models.Model):
 
     _inherit = 'hr.holidays'
-
-    approvers = fields.Char(compute='_get_approvers', readonly=True)
-
-    def _get_approvers(self):
-        group_h_manager = self.env.ref('hr_holidays.group_hr_holidays_manager')
-        approver_ids = []
-        for recipient in group_h_manager.users:
-            approver_ids.append(str(recipient.partner_id.id))
-        for holiday in self:
-            self.approvers = ','.join(approver_ids)
 
     #(override) Model: hr.holidays, Function: _check_date()
     @api.constrains('date_from', 'date_to')
@@ -63,23 +53,3 @@ class ElegoHolidays(models.Model):
         super(ElegoHolidays, self)._onchange_date_to()
         self.number_of_days_temp = len(self.env['hr.holidays.public']._compute_date(self.date_from, self.date_to, self.employee_id)['annual_leaves'])
 
-    @api.model
-    def create(self, values):
-        holiday = super(ElegoHolidays, self.with_context(mail_create_nolog=True, mail_create_nosubscribe=True)).create(values)
-        self.notify_approvers(holiday.id)
-        return holiday
-
-    @api.multi
-    def write(self, values):
-        result = super(ElegoHolidays, self).write(values)
-        for holiday in self:
-            if holiday.state == "confirm" and 'message_follower_ids' not in values:
-                self.notify_approvers(holiday.id)
-        return result
-
-    @api.model
-    def notify_approvers(self, holiday_id):
-        serverAction = self.env.ref('hr_holidays_public_germany.action_email_new_leave_notif')
-        ctx = {'active_model': self._name, 'active_id': holiday_id}
-        serverAction.with_context(ctx).run()
-        return True

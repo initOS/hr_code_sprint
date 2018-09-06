@@ -10,20 +10,6 @@ class HrPublicHolidays(models.Model):
 
     _inherit = 'hr.holidays.public'
 
-    @api.multi
-    def action_delete_allocation_and_leaves(self):
-        self.ensure_one()
-        hr_holidays_obj = self.env['hr.holidays']
-        line_ids = [l.id for l in self.line_ids]
-        holidays = hr_holidays_obj.search(['|', ('public_holidays_id','=',self.id), ('public_holidays_line_id','in',line_ids)])
-        holidays.action_refuse()
-        holidays.action_draft()
-        holidays.unlink()
-
-    allocation_ids = fields.One2many(comodel_name='hr.holidays',
-                              inverse_name='public_holidays_id',
-                              string='Allocations')
-
     @api.model
     def _compute_date(self, date_from, date_to, employee=None):
         employee_id = employee and employee.id or False
