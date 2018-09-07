@@ -1,6 +1,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo.addons.hr_holidays_public_germany.tests.common import \
+from odoo.addons.hr_holidays_public_generator_de.tests.common import \
     TestHrHolidaysPublicGenerator
 
 
@@ -28,7 +28,7 @@ class TestHrHolidaysPublicGenerator(TestHrHolidaysPublicGenerator):
             self.HrHolidaysPublic.search([('year', '=', self.TestYear)])[0].id
 
         # Test Create Public Holidays for 2019 from 2019
-        TestYear = "2019"
+        TestYear = 2019
         wizard_data = {
             "year": TestYear,
             "country_id": self.CountryId,

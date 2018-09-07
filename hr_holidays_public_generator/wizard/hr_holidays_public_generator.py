@@ -1,5 +1,5 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
@@ -11,9 +11,15 @@ class HrHolidaysPublicGenerator(models.TransientModel):
     _name = 'hr.holidays.public.generator'
 
     year = fields.Integer('Year', required=True, default=(lambda self: datetime.today().year))
-    country_id = fields.Many2one('res.country', string='Country', required=True, domain=[('code', 'in', COUNTRY_GENERATORS)])
+    country_id = fields.Many2one('res.country', string='Country', 
+                                 required=True, domain=[('code', 'in', COUNTRY_GENERATORS)])
     state_id = fields.Many2one('res.country.state', string='State')
     template_id = fields.Many2one('hr.holidays.public', string='From Template')
+
+    @api.onchange('template_id')
+    def onchange_template_id(self):
+        if self.template_id:
+            self.country_id = self.template_id.country_id and self.template_id.country_id.id or False
 
     @api.multi
     def generate_function_copy_name(self):

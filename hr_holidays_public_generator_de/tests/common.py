@@ -13,7 +13,7 @@ class TestHrHolidaysPublicGenerator(common.TransactionCase):
             self.env['hr.holidays.public.generator']
         self.HrHolidaysPublicLine = self.env['hr.holidays.public.line']
         self.HrHolidaysPublic = self.env['hr.holidays.public']
-        self.TestYear = "2018"
+        self.TestYear = 2018
         self.CountryId = self.ref('base.de')
 
         # Test Create Public Holidays for 2018
