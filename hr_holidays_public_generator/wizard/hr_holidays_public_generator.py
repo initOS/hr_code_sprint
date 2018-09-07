@@ -47,7 +47,7 @@ class HrHolidaysPublicGenerator(models.TransientModel):
             function_name = self.generate_function_generate_name()
             if not function_name:
                 raise UserError(_(
-                    """There is no copy function defined for this county or
+                    """There is no generate function defined for this county or
                     the function name does not fit the requirement - action_generate_%s_holidays
                     where %s is the county code."""
                  ))

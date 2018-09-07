@@ -10,8 +10,10 @@ class TestHrHolidaysPublicGenerator(TestHrHolidaysPublicGenerator):
         self.hr_holidays_public_generator.action_generate_de_holidays()
 
         hr_holiday_public = \
-            self.HrHolidaysPublic.search([('year', '=', self.TestYear),
-                                          ('country_id', '=', self.CountryId)])
+            self.HrHolidaysPublic.search([
+                ('year', '=', self.TestYear),
+                ('country_id', '=', self.CountryId)
+            ])
         if not hr_holiday_public:
             hr_holiday_public = None
 
@@ -26,8 +28,10 @@ class TestHrHolidaysPublicGenerator(TestHrHolidaysPublicGenerator):
     def test_action_copy_de_holidays(self):
         self.hr_holidays_public_generator.action_generate_de_holidays()
         template_id = \
-            self.HrHolidaysPublic.search([('year', '=', self.TestYear),
-                                          ('country_id', '=', self.CountryId)])[0].id
+            self.HrHolidaysPublic.search([
+                ('year', '=', self.TestYear),
+                ('country_id', '=', self.CountryId)
+            ])[0].id
 
         # Test Create Public Holidays for 2019 from 2019
         TestYear = 2019
@@ -37,13 +41,16 @@ class TestHrHolidaysPublicGenerator(TestHrHolidaysPublicGenerator):
             "template_id": template_id
         }
 
-        hr_holidays_public_generator_copy = self.HrHolidaysPublicGenerator.create(wizard_data)
+        hr_holidays_public_generator_copy = \
+            self.HrHolidaysPublicGenerator.create(wizard_data)
 
         hr_holidays_public_generator_copy.action_copy_de_holidays()
 
         hr_holiday_public = \
-            self.HrHolidaysPublic.search([('year', '=', TestYear),
-                                          ('country_id', '=', self.CountryId)])
+            self.HrHolidaysPublic.search([
+                ('year', '=', TestYear),
+                ('country_id', '=', self.CountryId)
+            ])
         if not hr_holiday_public:
             hr_holiday_public = None
 
