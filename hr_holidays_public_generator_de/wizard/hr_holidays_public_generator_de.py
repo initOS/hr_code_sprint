@@ -4,9 +4,9 @@
 from datetime import datetime, timedelta
 
 from odoo import _, api, fields, models
+from odoo.addons.hr_holidays_public_generator.wizard.hr_holidays_public_generator import \
+    COUNTRY_GENERATORS
 from odoo.exceptions import UserError
-from odoo.addons.hr_holidays_public_generator.\
-    wizard.hr_holidays_public_generator import COUNTRY_GENERATORS
 
 COUNTRY_GENERATORS.append("DE")
 
@@ -107,6 +107,7 @@ class HrHolidaysPublicGenerator(models.TransientModel):
                 'name': _("Corpus Christi"),
                 'date': self.calculate_corpus_christi(easter),
                 'variable_date': True,
+                'state_ids': [(6, 0, state_ids)],
                 'year_id': existing_holidays.id
             })
 

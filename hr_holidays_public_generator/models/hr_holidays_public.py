@@ -5,7 +5,9 @@ import logging
 import time
 from datetime import timedelta
 
-from odoo import _, api, exceptions, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
+from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 
 _logger = logging.getLogger(__name__)
 
@@ -26,7 +28,7 @@ class HrPublicHolidays(models.Model):
                 'weekends': weekends
             }
         if date_from > date_to:
-            raise exceptions.Warning(
+            raise UserError(
                 _('The start date must be anterior to the end date.')
             )
         date_first = fields.Datetime.from_string(date_from)
@@ -48,9 +50,8 @@ class HrPublicHolidays(models.Model):
 
     @api.model
     def is_weekend(self, date):
-        # TODO refactor to the SERVER DATETIME format
         if time.strptime(
-                date.strftime("%Y-%m-%d"), '%Y-%m-%d'
+                fields.Date.to_string(date), DEFAULT_SERVER_DATE_FORMAT
         ).tm_wday in (5, 6):
             return True
         return False
