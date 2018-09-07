@@ -88,8 +88,6 @@ class HrHolidaysPublicGenerator(models.TransientModel):
     def calculate_state_floating_holidays(self,
                                           existing_holidays,
                                           state=None):
-        if not state:
-            return
         public_holiday_line_obj = self.env['hr.holidays.public.line']
         easter = self.calculate_easter_sunday(self.year)
         # Baden-Württemberg, Bavaria, Hesse, North
@@ -102,7 +100,7 @@ class HrHolidaysPublicGenerator(models.TransientModel):
             self.env.ref('l10n_de_country_states.res_country_state_RP').id,
             self.env.ref('l10n_de_country_states.res_country_state_SL').id
         ]
-        if state.id in state_ids:
+        if not state or state.id in state_ids:
             public_holiday_line_obj.create({
                 'name': _("Corpus Christi"),
                 'date': self.calculate_corpus_christi(easter),
@@ -147,8 +145,6 @@ class HrHolidaysPublicGenerator(models.TransientModel):
 
     @api.model
     def calculate_state_fixed_holidays(self, existing_holidays, state=None):
-        if not state:
-            return
         public_holiday_line_obj = self.env['hr.holidays.public.line']
         # Baden-Württemberg, Bavaria, Saxony-Anhalt
         state_ids = [
@@ -156,7 +152,7 @@ class HrHolidaysPublicGenerator(models.TransientModel):
             self.env.ref('l10n_de_country_states.res_country_state_BY').id,
             self.env.ref('l10n_de_country_states.res_country_state_ST').id
         ]
-        if state.id in state_ids:
+        if not state or state.id in state_ids:
             public_holiday_line_obj.create({
                 'name': _("Three Kings Day"),
                 'date': "%s-01-06" % existing_holidays.year,
@@ -170,7 +166,7 @@ class HrHolidaysPublicGenerator(models.TransientModel):
             self.env.ref('l10n_de_country_states.res_country_state_SL').id
         ]
 
-        if state.id in state_ids:
+        if not state or state.id in state_ids:
             public_holiday_line_obj.create({
                 'name': _("Assumption Day"),
                 'date': "%s-08-15" % existing_holidays.year,
@@ -192,7 +188,7 @@ class HrHolidaysPublicGenerator(models.TransientModel):
             self.env.ref('l10n_de_country_states.res_country_state_ST').id,
             self.env.ref('l10n_de_country_states.res_country_state_TH').id]
 
-        if state.id in state_ids:
+        if not state or state.id in state_ids:
             public_holiday_line_obj.create({
                 'name': _("Day of Reformation"),
                 'date': "%s-10-31" % existing_holidays.year,
@@ -209,7 +205,7 @@ class HrHolidaysPublicGenerator(models.TransientModel):
             self.env.ref('l10n_de_country_states.res_country_state_RP').id,
             self.env.ref('l10n_de_country_states.res_country_state_SL').id
         ]
-        if state.id in state_ids:
+        if not state or state.id in state_ids:
             public_holiday_line_obj.create({
                 'name': _("All Saints' Day"),
                 'date': "%s-11-01" % existing_holidays.year,
@@ -220,7 +216,7 @@ class HrHolidaysPublicGenerator(models.TransientModel):
         # Sachsen
         state_ids = \
             [self.env.ref('l10n_de_country_states.res_country_state_SN').id]
-        if state.id in state_ids:
+        if not state or state.id in state_ids:
             public_holiday_line_obj.create({
                 'name': _("Repentance Day"),
                 'date': "%s-11-23" % existing_holidays.year,
