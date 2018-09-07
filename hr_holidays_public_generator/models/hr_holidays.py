@@ -23,7 +23,6 @@ class HrHolidays(models.Model):
                 )['annual_leaves']
             )
 
-
     @api.onchange('date_to', 'employee_id')
     def _onchange_date_to(self):
         super(HrHolidays, self)._onchange_date_to()

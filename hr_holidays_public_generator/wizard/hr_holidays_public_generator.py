@@ -10,25 +10,40 @@ COUNTRY_GENERATORS = []
 class HrHolidaysPublicGenerator(models.TransientModel):
     _name = 'hr.holidays.public.generator'
 
-    year = fields.Integer('Year', required=True, default=(lambda self: datetime.today().year))
-    country_id = fields.Many2one('res.country', string='Country', 
-                                 required=True, domain=[('code', 'in', COUNTRY_GENERATORS)])
+    year = \
+        fields.Integer(
+            'Year',
+            required=True,
+            default=(lambda self: datetime.today().year)
+        )
+    country_id = \
+        fields.Many2one(
+            'res.country',
+            string='Country',
+            required=True,
+            domain=[('code', 'in', COUNTRY_GENERATORS)])
     state_id = fields.Many2one('res.country.state', string='State')
-    template_id = fields.Many2one('hr.holidays.public', string='From Template')
+    template_id = \
+        fields.Many2one('hr.holidays.public', string='From Template')
 
     @api.onchange('template_id')
     def onchange_template_id(self):
         if self.template_id:
-            self.country_id = self.template_id.country_id and self.template_id.country_id.id or False
+            self.country_id = \
+                self.template_id.country_id and \
+                self.template_id.country_id.id or \
+                False
 
     @api.multi
     def generate_function_copy_name(self):
-        function_name = 'action_copy_%s_holidays' % self.country_id.code.lower()
+        function_name = \
+            'action_copy_%s_holidays' % self.country_id.code.lower()
         return function_name
 
     @api.multi
     def generate_function_generate_name(self):
-        function_name = 'action_generate_%s_holidays' % self.country_id.code.lower()
+        function_name = \
+            'action_generate_%s_holidays' % self.country_id.code.lower()
         return function_name
 
     @api.multi
@@ -39,16 +54,17 @@ class HrHolidaysPublicGenerator(models.TransientModel):
             if not function_name:
                 raise UserError(_(
                     """There is no copy function defined for this county or
-                    the function name does not fit the requirement - action_copy_%s_holidays
-                    where %s id the county code."""
+                    the function name does not fit the requirement -
+                    action_copy_%s_holidays where %s id the county code."""
                  ))
             getattr(self, function_name)()
         else:
             function_name = self.generate_function_generate_name()
             if not function_name:
                 raise UserError(_(
-                    """There is no generate function defined for this county or
-                    the function name does not fit the requirement - action_generate_%s_holidays
-                    where %s is the county code."""
+                    """There is no generate function defined for this county
+                    or the function name does not fit the requirement -
+                    action_generate_%s_holidays where %s is
+                    the county code."""
                  ))
             getattr(self, function_name)()

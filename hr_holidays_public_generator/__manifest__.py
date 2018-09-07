@@ -12,7 +12,8 @@
 
 HR Holidays Public Generator
 =================================================
-This module is used as a template and have to be used with real implementation module.
+This module is used as a template and have to be
+used with real implementation module.
 
 Functions:
 

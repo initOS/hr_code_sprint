@@ -24,7 +24,9 @@ class HrPublicHolidays(models.Model):
                 'weekends': weekends
             }
         if date_from > date_to:
-            raise exceptions.Warning(_('The start date must be anterior to the end date.'))
+            raise exceptions.Warning(
+                _('The start date must be anterior to the end date.')
+            )
         date_first = fields.Datetime.from_string(date_from)
         date_last = fields.Datetime.from_string(date_to)
         date_next = date_first
@@ -45,6 +47,8 @@ class HrPublicHolidays(models.Model):
     @api.model
     def is_weekend(self, date):
         # TODO refactor to the SERVER DATETIME format
-        if time.strptime(date.strftime("%Y-%m-%d"),'%Y-%m-%d').tm_wday in (5,6):
+        if time.strptime(
+                date.strftime("%Y-%m-%d"), '%Y-%m-%d'
+        ).tm_wday in (5, 6):
             return True
         return False
