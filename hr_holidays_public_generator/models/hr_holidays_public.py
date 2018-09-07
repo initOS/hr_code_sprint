@@ -56,4 +56,3 @@ class HrPublicHolidays(models.Model):
             return True
         return False
 
-# TEST
